@@ -1,0 +1,15 @@
+{
+  "name": "@danroshko/feature-toggle-transpiler",
+  "version": "0.1.0",
+  "description": "Toggle features in JavaScript/TypeScript projects at build time",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "jest": "^24.8.0"
+  },
+  "license": "MIT"
+}
