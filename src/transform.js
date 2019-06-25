@@ -25,7 +25,7 @@ const transform = (source, options) => {
         const comment = comments[comments.length - 1]
         const feature = extractFeatureName(comment.value)
 
-        if (options.featureToggle.isDisabled(feature)) {
+        if (feature && options.featureToggle.isDisabled(feature)) {
           path.remove()
         }
       }

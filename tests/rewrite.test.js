@@ -44,7 +44,10 @@ test('it rewrites files if some features are disabled', () => {
 
 
 // #[feature(b)]
-const b = 2;`)
+const b = 2;
+
+/* simple comment without feature */
+const c = 3;`)
 
   expect(tsAfter).toBe(`
 
