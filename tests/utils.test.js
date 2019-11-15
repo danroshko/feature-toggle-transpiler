@@ -1,37 +1,51 @@
-const { detectDisabledFeatures, extractFeatureName } = require('../src/utils')
+const { detectDisabledFeatures, extractFeatureNames } = require('../src/utils')
 
 describe('extractFeatureName', () => {
-  it('returns null if comment does not contain features', () => {
+  it('returns empty array if comment does not contain features', () => {
     const comments = ['*** some text', '[]()', '#!/bin/bash', '', '#[unknown]']
 
     for (const comment of comments) {
-      const f = extractFeatureName(comment)
-      expect(f).toBe(null)
+      const f = extractFeatureNames(comment)
+      expect(f).toEqual([])
     }
   })
 
   it('finds name in simple comments', () => {
-    expect(extractFeatureName('#[feature(foo)]')).toBe('foo')
-    expect(extractFeatureName(' #[feature(bar)] ')).toBe('bar')
-    expect(extractFeatureName('* #[feature(foo:bar)] some text')).toBe('foo:bar')
+    expect(extractFeatureNames('#[feature(foo)]')).toEqual(['foo'])
+    expect(extractFeatureNames(' #[feature(bar)] ')).toEqual(['bar'])
+    expect(extractFeatureNames('* #[feature(foo:bar)] some text')).toEqual(['foo:bar'])
   })
 
   it('finds name in multiline comments', () => {
-    expect(
-      extractFeatureName(`
+    const comment1 = `
       #[feature(abc-def)]
       *
       *
-    `)
-    ).toBe('abc-def')
+    `
+    expect(extractFeatureNames(comment1)).toEqual(['abc-def'])
 
-    expect(
-      extractFeatureName(`
+    const comment2 = `
       @apiVersion 1
       #[feature(abc:def)]
       ## * ^ *
-    `)
-    ).toBe('abc:def')
+    `
+    expect(extractFeatureNames(comment2)).toEqual(['abc:def'])
+  })
+
+  it('finds all names in comments with multiple features', () => {
+    const comment1 = `
+      #[feature(ABC)]
+      #[feature(DEF)]
+    `
+    expect(extractFeatureNames(comment1)).toEqual(['ABC', 'DEF'])
+
+    const comment2 = `
+      #[feature(f1)]
+      some description
+      #[feature(f2)]
+      ### even more text
+    `
+    expect(extractFeatureNames(comment2)).toEqual(['f1', 'f2'])
   })
 })
 

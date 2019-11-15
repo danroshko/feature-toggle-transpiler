@@ -18,12 +18,19 @@ the line above means that the following export will be removed if feature 'foo' 
 export const foo = 1
 
 /*
-#[feature(bar)]
-it also can be used to remove whole blocks of code, for loop will be removed if 'bar' is disabled
+#[feature(for)]
+it also can be used to remove whole blocks of code, *for* loop will be removed if 'for' is disabled
 */
 for (let i = 0; i < 10; i++) {
   console.log(i)
 }
+
+/**
+ * #[feature(foo)]
+ * #[feature(bar)]
+ * Multiple flags is also allowed, this export will be removed only if both 'foo' and 'bar' are disabled
+ */
+export const foobar = 2
 ```
 
 Can be used manually to transform strings of code

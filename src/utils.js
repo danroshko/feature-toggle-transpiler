@@ -1,18 +1,24 @@
 /**
- * Extract feature name from comment
+ * Extract feature names from comment
  * '#[feature(foo)]' -> 'foo'
  * @param {string} comment
  */
-const extractFeatureName = comment => {
+const extractFeatureNames = comment => {
   const offset = 10 // leangth of '#[feature('
 
-  const start = comment.indexOf('#[feature(')
-  if (start === -1) return null
+  const features = []
+  let start = 0
+  let end = 0
 
-  const end = comment.indexOf(')]', start + offset)
-  if (end === -1) return null
+  while (true) {
+    start = comment.indexOf('#[feature(', end)
+    if (start === -1) return features
 
-  return comment.slice(start + offset, end)
+    end = comment.indexOf(')]', start + offset)
+    if (end === -1) return features
+
+    features.push(comment.slice(start + offset, end))
+  }
 }
 
 /**
@@ -25,15 +31,14 @@ const detectDisabledFeatures = (source, featureToggle) => {
   if (!matches) return false
 
   for (const match of matches) {
-    const feature = extractFeatureName(match)
+    const features = extractFeatureNames(match)
+    const isDisabled = features.some(feature => featureToggle.isDisabled(feature))
 
-    if (featureToggle.isDisabled(feature)) {
-      return true
-    }
+    if (isDisabled) return true
   }
 
   return false
 }
 
-exports.extractFeatureName = extractFeatureName
+exports.extractFeatureNames = extractFeatureNames
 exports.detectDisabledFeatures = detectDisabledFeatures

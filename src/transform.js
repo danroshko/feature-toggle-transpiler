@@ -1,7 +1,7 @@
 const parser = require('@babel/parser')
 const traverse = require('@babel/traverse')
 const generate = require('@babel/generator')
-const { detectDisabledFeatures, extractFeatureName } = require('./utils')
+const { detectDisabledFeatures, extractFeatureNames } = require('./utils')
 
 const transform = (source, options) => {
   // if source does not contain disabled features, we do not need to modify
@@ -9,6 +9,8 @@ const transform = (source, options) => {
   const shouldParse = detectDisabledFeatures(source, options.featureToggle)
 
   if (!shouldParse) return source
+
+  const { featureToggle } = options
 
   // parse source code into AST
   const ast = parser.parse(source, {
@@ -23,11 +25,11 @@ const transform = (source, options) => {
 
       if (comments != null && comments.length > 0) {
         const comment = comments[comments.length - 1]
-        const feature = extractFeatureName(comment.value)
+        const features = extractFeatureNames(comment.value)
 
-        if (feature && options.featureToggle.isDisabled(feature)) {
-          path.remove()
-        }
+        const shouldRemove = features.length > 0 && features.every(feature => featureToggle.isDisabled(feature))
+
+        if (shouldRemove) path.remove()
       }
     },
   })
@@ -38,8 +40,8 @@ const transform = (source, options) => {
     {
       retainLines: true,
       shouldPrintComment(comment) {
-        const feature = extractFeatureName(comment)
-        return !feature || options.featureToggle.isEnabled(feature)
+        const features = extractFeatureNames(comment)
+        return !features.length || features.some(feature => featureToggle.isEnabled(feature))
       },
     },
     source

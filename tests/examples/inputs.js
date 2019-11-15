@@ -17,7 +17,7 @@ router.get('/foo', getFoo);
  */
 router.get('/bar', getBar);
 
-export default router;`
+export default router;`;
 
 exports.source2 = `// some function
 export function f(a: number, b: number) {
@@ -53,4 +53,20 @@ export function g(s: string): number {
 
 // #[feature(pi)]
 export const PI = 3.14
-`
+`;
+
+exports.source3 = `
+/**
+ * #[feature(a)]
+ * #[feature(b)]
+ * comment with multiple features
+ */
+exports.sum = (a, b) => a + b;
+
+/**
+ * #[feature(b)]
+ * #[feature(c)]
+ * comment with different features
+ */
+exports.prod = (a, b) => a * b;
+`;
