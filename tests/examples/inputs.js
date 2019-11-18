@@ -57,8 +57,8 @@ export const PI = 3.14
 
 exports.source3 = `
 /**
- * #[feature(a)]
  * #[feature(b)]
+ * #[feature(a)]
  * comment with multiple features
  */
 exports.sum = (a, b) => a + b;

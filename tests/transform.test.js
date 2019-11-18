@@ -48,8 +48,8 @@ test('transpiling source2', () => {
 
 test('transpiling source3', () => {
   const toggle = {
-    isEnabled: f => f !== 'a' && f !== 'b',
-    isDisabled: f => f === 'a' || f === 'b',
+    isEnabled: f => f !== 'a',
+    isDisabled: f => f === 'a',
   }
   const options = { useTypescriptPlugin: false, featureToggle: toggle }
 

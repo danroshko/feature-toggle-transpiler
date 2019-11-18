@@ -27,7 +27,7 @@ const transform = (source, options) => {
         const comment = comments[comments.length - 1]
         const features = extractFeatureNames(comment.value)
 
-        const shouldRemove = features.length > 0 && features.every(feature => featureToggle.isDisabled(feature))
+        const shouldRemove = features.length > 0 && features.some(feature => featureToggle.isDisabled(feature))
 
         if (shouldRemove) path.remove()
       }
@@ -41,7 +41,7 @@ const transform = (source, options) => {
       retainLines: true,
       shouldPrintComment(comment) {
         const features = extractFeatureNames(comment)
-        return !features.length || features.some(feature => featureToggle.isEnabled(feature))
+        return !features.length || features.every(feature => featureToggle.isEnabled(feature))
       },
     },
     source

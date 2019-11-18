@@ -28,7 +28,7 @@ for (let i = 0; i < 10; i++) {
 /**
  * #[feature(foo)]
  * #[feature(bar)]
- * Multiple flags is also allowed, this export will be removed only if both 'foo' and 'bar' are disabled
+ * Multiple flags is also allowed, this export will be removed if any of the 'foo' or 'bar' are disabled
  */
 export const foobar = 2
 ```
